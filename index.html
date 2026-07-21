@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NOTHING — $NIC on Solana</title>
+<meta name="description" content="NOTHING. The token that represents absolutely nothing. Live on Solana." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="NOTHING" />
+<meta property="og:description" content="It's nothing. That's the whole pitch." />
+<meta property="og:type" content="website" />
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2230%22 fill=%22none%22 stroke=%22%2314F195%22 stroke-width=%228%22/></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<canvas id="void-field" aria-hidden="true"></canvas>
+
+<div class="brand-watermark" aria-hidden="true"></div>
+
+<div class="scan-overlay" aria-hidden="true"></div>
+
+<nav class="site-nav" id="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="#top">$NIC</a>
+    <div class="site-nav-links">
+      <a href="#pulse-section">Pulse</a>
+      <a href="#feed-section">Feed</a>
+      <a href="#curve-section">Curve</a>
+      <a href="#lineage-section">Holder Tree</a>
+      <a href="#howtobuy-section">How to Buy</a>
+      <a href="#meme-section">Gallery</a>
+    </div>
+    <div class="nav-pulse-indicator" id="nav-pulse-indicator" title="Live buy/sell indicator">
+      <svg viewBox="0 0 40 40" width="26" height="26">
+        <circle class="nav-pulse-core" cx="20" cy="20" r="15" />
+        <path class="nav-pulse-arrow nav-pulse-arrow-up" d="M20,9 L12,21 L17,21 L17,30 L23,30 L23,21 L28,21 Z" />
+        <path class="nav-pulse-arrow nav-pulse-arrow-down" d="M20,31 L12,19 L17,19 L17,10 L23,10 L23,19 L28,19 Z" />
+      </svg>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+
+  <header class="hero">
+    <div class="status-row">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-label" id="status-label">CONNECTING…</span>
+    </div>
+
+    <h1 class="wordmark" id="wordmark" data-text="NOTHING">NOTHING</h1>
+    <p class="wordmark-sub" id="wordmark-sub" data-text="is coming">is coming</p>
+
+    <p class="tagline panel">A token that represents absolutely nothing.<br class="br-mobile"> No roadmap. No utility. No promises. Just a chart.</p>
+
+    <div class="ca-pill" id="ca-pill">
+      <span class="ca-label">CA</span>
+      <span class="ca-value" id="ca-value">generating void…</span>
+      <button class="ca-copy" id="ca-copy" aria-label="Copy contract address">copy</button>
+    </div>
+
+    <div class="hero-links">
+      <a id="link-dexscreener" class="hero-link" href="#" target="_blank" rel="noopener">Dexscreener</a>
+      <a id="link-pumpfun" class="hero-link" href="#" target="_blank" rel="noopener">pump.fun</a>
+      <a id="link-solscan" class="hero-link" href="#" target="_blank" rel="noopener">Solscan</a>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+
+    <section class="pulse-section panel" id="pulse-section" aria-label="Live trade pulse">
+      <div class="panel-header">
+        <span>live pulse</span>
+        <span class="panel-hint">buys flash green · sells flash red</span>
+      </div>
+      <div class="pulse-wrap">
+        <svg id="pulse-orb" viewBox="0 0 400 400" width="100%" height="100%">
+          <circle class="ring ring-3" cx="200" cy="200" r="150" />
+          <circle class="ring ring-2" cx="200" cy="200" r="115" />
+          <circle class="ring ring-1" cx="200" cy="200" r="80" />
+          <circle class="burst-ring" id="burst-ring" cx="200" cy="200" r="80" />
+          <circle class="core" cx="200" cy="200" r="46" />
+          <text class="core-label" id="core-label" x="200" y="195">Ø</text>
+          <path class="core-arrow arrow-up" id="arrow-up" d="M200,176 L182,206 L192,206 L192,224 L208,224 L208,206 L218,206 Z" />
+          <path class="core-arrow arrow-down" id="arrow-down" d="M200,224 L182,194 L192,194 L192,176 L208,176 L208,194 L218,194 Z" />
+          <text class="core-sub" x="200" y="222" id="core-sub">idle</text>
+        </svg>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value buy-color" id="stat-buys">0</span>
+          <span class="stat-key">buys</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="stat-age">00:00:00</span>
+          <span class="stat-key">time since nothing began</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value sell-color" id="stat-sells">0</span>
+          <span class="stat-key">sells</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="curve-section panel" id="curve-section" aria-label="Pump.fun bonding curve status">
+      <div class="panel-header">
+        <span>pump.fun bonding curve</span>
+        <span class="curve-badge" id="curve-badge">tracking…</span>
+      </div>
+      <div class="curve-bar-track">
+        <div class="curve-bar-fill" id="curve-bar-fill"></div>
+      </div>
+      <div class="curve-meta-row">
+        <span id="curve-percent">0% to graduation</span>
+        <span id="curve-marketcap">MC —</span>
+      </div>
+      <div class="graduation-stamp" id="graduation-stamp" hidden>
+        <span class="grad-icon">🎓</span>
+        <span>graduated to <span id="graduation-venue">an AMM</span> — <span id="graduation-time"></span></span>
+      </div>
+    </section>
+
+    <section class="feed-section panel" id="feed-section" aria-label="Live transaction feed">
+      <div class="panel-header">
+        <span>live feed</span>
+        <span class="panel-hint" id="feed-hint">waiting on the void…</span>
+      </div>
+      <div class="feed-list" id="feed-list"></div>
+    </section>
+
+  </div>
+
+  <section class="lineage-section panel" id="lineage-section" aria-label="Holder tree">
+    <div class="panel-header">
+      <span>holder tree</span>
+      <span class="panel-hint">top holders, connected by where tokens came from</span>
+    </div>
+    <div class="lineage-trigger">
+      <button class="lineage-generate" id="lineage-generate">Open holder tree</button>
+      <p class="lineage-note">
+        Opens a full-screen family-tree map — the bonding curve sits at the
+        top, with your top holders branching off it, connected to whichever
+        source the data actually traced (the curve itself, or another top
+        holder). Every wallet appears exactly once, no matter how many
+        branches connect to it. Click any box to trace that wallet's own
+        recent transfers and expand its children directly underneath it —
+        each one gets checked against its current balance, so a wallet that
+        received tokens but has since sold or moved them all on shows up
+        clearly marked "SOLD" instead of looking like an active holder.
+        Clicking any box also opens a side panel with its estimated
+        gain/loss. Traces every top-level holder's origin up front, so it
+        can take a little while to open — real RPC work, not a full history
+        since launch (that would mean scanning far more transactions than
+        any free tier allows).
+      </p>
+    </div>
+  </section>
+
+  <section class="howtobuy-section panel" id="howtobuy-section" aria-label="How to buy">
+    <div class="panel-header">
+      <span>how to buy $NIC</span>
+      <span class="panel-hint">it's nothing, but here's how</span>
+    </div>
+
+    <div class="howtobuy-mascot-wrap">
+      <img class="howtobuy-mascot" id="howtobuy-mascot" src="images/mascot.png" alt="$NIC mascot" />
+    </div>
+
+    <div class="howtobuy-timeline">
+      <div class="howtobuy-step">
+        <div class="howtobuy-card">
+          <span class="howtobuy-num">1</span>
+          <svg class="howtobuy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M2.5 9.5h19"/><path d="M16 14.5h3"/></svg>
+          <p class="howtobuy-title">Get a Solana wallet</p>
+          <p class="howtobuy-desc">Phantom or Solflare both work fine — free, a few minutes to set up if you don't have one already.</p>
+        </div>
+      </div>
+      <div class="howtobuy-step">
+        <div class="howtobuy-card">
+          <span class="howtobuy-num">2</span>
+          <svg class="howtobuy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.5 15.5c0 1 1 1.5 2.5 1.5s2.5-.6 2.5-1.7c0-2.4-5-1.1-5-3.5 0-1.1 1-1.7 2.5-1.7s2.5.5 2.5 1.5"/><path d="M12 7v1.3M12 15.7V17"/></svg>
+          <p class="howtobuy-title">Get some SOL</p>
+          <p class="howtobuy-desc">Buy SOL on an exchange (Coinbase, Kraken, etc.) and send it to your wallet, or buy directly inside Phantom/Solflare.</p>
+        </div>
+      </div>
+      <div class="howtobuy-step">
+        <div class="howtobuy-card">
+          <span class="howtobuy-num">3</span>
+          <svg class="howtobuy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="4" width="10" height="4" rx="1"/><path d="M7 6H5.5A1.5 1.5 0 0 0 4 7.5v11A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-11A1.5 1.5 0 0 0 18.5 6H17"/><path d="M8.5 12h7M8.5 15.5h7"/></svg>
+          <p class="howtobuy-title">Copy the contract address</p>
+          <p class="howtobuy-desc">Use the copy button at the top of this page — never trust a contract address from anywhere else.</p>
+        </div>
+      </div>
+      <div class="howtobuy-step">
+        <div class="howtobuy-card">
+          <span class="howtobuy-num">4</span>
+          <svg class="howtobuy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h13M17 8l-3-3M17 8l-3 3"/><path d="M20 16H7M7 16l3-3M7 16l3 3"/></svg>
+          <p class="howtobuy-title">Paste it into pump.fun or a swap</p>
+          <p class="howtobuy-desc">Use the pump.fun / Dexscreener links above, paste the address, connect your wallet.</p>
+        </div>
+      </div>
+      <div class="howtobuy-step">
+        <div class="howtobuy-card">
+          <span class="howtobuy-num">5</span>
+          <svg class="howtobuy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+          <p class="howtobuy-title">Swap SOL for $NIC</p>
+          <p class="howtobuy-desc">Confirm the swap in your wallet. Congratulations — you now hold nothing, officially.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="howtobuy-disclaimer">This is not financial advice. This is barely advice at all. Always verify the contract address yourself before buying anything.</p>
+  </section>
+
+  <section class="meme-section panel" id="meme-section" aria-label="Meme gallery">
+    <div class="panel-header">
+      <span>meme gallery</span>
+      <span class="panel-hint">← drag or scroll →</span>
+    </div>
+    <div class="meme-scroll" id="meme-scroll">
+      <p class="meme-empty" id="meme-empty">No memes yet — drop image files in the <code>images</code> folder and list their filenames in <code>CONFIG.MEME_IMAGES</code> in app.js.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>Nothing is coming - has no team, no treasury, and no intentions. Nothing here is financial advice, mostly because nothing here is anything. Verify the contract address yourself before doing anything with it.</p>
+    <p class="footer-meta">$NIC · Solana · <span id="footer-year"></span></p>
+  </div>
+</footer>
+
+<div class="lineage-modal" id="lineage-modal" hidden>
+  <div class="lineage-modal-topbar">
+    <div class="lineage-modal-title">
+      <span>$NIC holder tree</span>
+      <span class="lineage-modal-hint" id="lineage-hint">…</span>
+    </div>
+    <button class="lineage-modal-close" id="lineage-modal-close">✕ Close</button>
+  </div>
+  <div class="lineage-main">
+    <div class="lineage-canvas-wrap" id="lineage-canvas-wrap">
+      <div class="lineage-canvas" id="lineage-body"></div>
+    </div>
+    <aside class="lineage-detail-panel" id="lineage-detail-panel" hidden>
+      <div class="lineage-detail-header">
+        <span>wallet details</span>
+        <button class="lineage-detail-close" id="lineage-detail-close" aria-label="Close details">✕</button>
+      </div>
+      <div class="lineage-detail-body" id="lineage-detail-body"></div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

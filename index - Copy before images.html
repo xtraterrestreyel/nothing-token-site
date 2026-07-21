@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NOTHING — $NIC on Solana</title>
+<meta name="description" content="NOTHING. The token that represents absolutely nothing. Live on Solana." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="NOTHING" />
+<meta property="og:description" content="It's nothing. That's the whole pitch." />
+<meta property="og:type" content="website" />
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2230%22 fill=%22none%22 stroke=%22%2314F195%22 stroke-width=%228%22/></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<canvas id="void-field" aria-hidden="true"></canvas>
+
+<div class="brand-watermark" aria-hidden="true"></div>
+
+<div class="scan-overlay" aria-hidden="true"></div>
+
+<main>
+
+  <header class="hero">
+    <div class="status-row">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-label" id="status-label">CONNECTING…</span>
+    </div>
+
+    <h1 class="wordmark" id="wordmark" data-text="NOTHING">NOTHING</h1>
+    <p class="wordmark-sub" id="wordmark-sub" data-text="is coming">is coming</p>
+
+    <p class="tagline">A token that represents absolutely nothing.<br class="br-mobile"> No roadmap. No utility. No promises. Just a chart.</p>
+
+    <div class="ca-pill" id="ca-pill">
+      <span class="ca-label">CA</span>
+      <span class="ca-value" id="ca-value">generating void…</span>
+      <button class="ca-copy" id="ca-copy" aria-label="Copy contract address">copy</button>
+    </div>
+
+    <div class="hero-links">
+      <a id="link-dexscreener" class="hero-link" href="#" target="_blank" rel="noopener">Dexscreener</a>
+      <a id="link-pumpfun" class="hero-link" href="#" target="_blank" rel="noopener">pump.fun</a>
+      <a id="link-solscan" class="hero-link" href="#" target="_blank" rel="noopener">Solscan</a>
+    </div>
+  </header>
+
+  <div class="dashboard-grid">
+
+    <section class="pulse-section panel" aria-label="Live trade pulse">
+      <div class="panel-header">
+        <span>live pulse</span>
+        <span class="panel-hint">buys flash green · sells flash red</span>
+      </div>
+      <div class="pulse-wrap">
+        <svg id="pulse-orb" viewBox="0 0 400 400" width="100%" height="100%">
+          <circle class="ring ring-3" cx="200" cy="200" r="150" />
+          <circle class="ring ring-2" cx="200" cy="200" r="115" />
+          <circle class="ring ring-1" cx="200" cy="200" r="80" />
+          <circle class="burst-ring" id="burst-ring" cx="200" cy="200" r="80" />
+          <circle class="core" cx="200" cy="200" r="46" />
+          <text class="core-label" id="core-label" x="200" y="195">Ø</text>
+          <path class="core-arrow arrow-up" id="arrow-up" d="M200,176 L182,206 L192,206 L192,224 L208,224 L208,206 L218,206 Z" />
+          <path class="core-arrow arrow-down" id="arrow-down" d="M200,224 L182,194 L192,194 L192,176 L208,176 L208,194 L218,194 Z" />
+          <text class="core-sub" x="200" y="222" id="core-sub">idle</text>
+        </svg>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value buy-color" id="stat-buys">0</span>
+          <span class="stat-key">buys</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="stat-age">00:00:00</span>
+          <span class="stat-key">time since nothing began</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value sell-color" id="stat-sells">0</span>
+          <span class="stat-key">sells</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="curve-section panel" aria-label="Pump.fun bonding curve status">
+      <div class="panel-header">
+        <span>pump.fun bonding curve</span>
+        <span class="curve-badge" id="curve-badge">tracking…</span>
+      </div>
+      <div class="curve-bar-track">
+        <div class="curve-bar-fill" id="curve-bar-fill"></div>
+      </div>
+      <div class="curve-meta-row">
+        <span id="curve-percent">0% to graduation</span>
+        <span id="curve-marketcap">MC —</span>
+      </div>
+      <div class="graduation-stamp" id="graduation-stamp" hidden>
+        <span class="grad-icon">🎓</span>
+        <span>graduated to <span id="graduation-venue">an AMM</span> — <span id="graduation-time"></span></span>
+      </div>
+    </section>
+
+    <section class="feed-section panel" aria-label="Live transaction feed">
+      <div class="panel-header">
+        <span>live feed</span>
+        <span class="panel-hint" id="feed-hint">waiting on the void…</span>
+      </div>
+      <div class="feed-list" id="feed-list"></div>
+    </section>
+
+  </div>
+
+  <footer class="site-footer">
+    <p>Nothing is coming ($NIC) has no team, no treasury, and no intentions. Nothing here is financial advice, mostly because nothing here is anything. Verify the contract address yourself before doing anything with it.</p>
+    <p class="footer-meta">$NIC · Solana · <span id="footer-year"></span></p>
+  </footer>
+
+</main>
+
+<script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
