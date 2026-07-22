@@ -522,6 +522,7 @@ main {
 }
 
 @media (max-width: 480px) {
+  main { padding-top: 148px; }
   .howtobuy-timeline { padding: 20px 16px; gap: 16px; }
   .howtobuy-disclaimer { padding: 0 16px 18px; }
   .howtobuy-mascot { width: 140px; max-height: 200px; }
