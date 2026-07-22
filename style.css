@@ -365,6 +365,23 @@ main {
 .ca-copy:hover { background: var(--buy); color: var(--void); }
 .ca-copy.copied { background: var(--buy); color: var(--void); }
 
+@media (max-width: 600px) {
+  .ca-pill {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 18px;
+    padding: 16px 18px;
+    width: 100%;
+  }
+  .ca-value {
+    width: 100%;
+    text-align: left;
+  }
+  .ca-copy {
+    align-self: flex-start;
+  }
+}
+
 .hero-links {
   display: flex;
   gap: 10px;
@@ -580,6 +597,18 @@ main {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (max-width: 600px) {
+  .panel-header {
+    flex-wrap: wrap;
+  }
+  .panel-hint {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    width: 100%;
+  }
 }
 
 /* ---------- pulse orb ---------- */
