@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css" />
+<script src="https://plugin.jup.ag/plugin-v1.js" data-preload defer></script>
 </head>
 <body>
 
@@ -32,10 +33,11 @@
     <a class="site-nav-brand" href="#top">$NIC</a>
     <div class="site-nav-links">
       <a href="#pulse-section">Pulse</a>
-      <a href="#feed-section">Feed</a>
       <a href="#curve-section">Curve</a>
+      <a href="#feed-section">Feed</a>
       <a href="#lineage-section">Holder Tree</a>
       <a href="#howtobuy-section">How to Buy</a>
+      <a href="#buynow-section">Buy Now</a>
       <a href="#meme-section">Gallery</a>
     </div>
     <div class="nav-pulse-indicator" id="nav-pulse-indicator" title="Live buy/sell indicator">
@@ -45,6 +47,7 @@
         <path class="nav-pulse-arrow nav-pulse-arrow-down" d="M20,31 L12,19 L17,19 L17,10 L23,10 L23,19 L28,19 Z" />
       </svg>
     </div>
+    <button class="nav-wallet-btn" id="nav-wallet-btn">Connect Wallet</button>
   </div>
 </nav>
 
@@ -71,6 +74,7 @@
       <a id="link-dexscreener" class="hero-link" href="#" target="_blank" rel="noopener">Dexscreener</a>
       <a id="link-pumpfun" class="hero-link" href="#" target="_blank" rel="noopener">pump.fun</a>
       <a id="link-solscan" class="hero-link" href="#" target="_blank" rel="noopener">Solscan</a>
+      <a id="link-share-x" class="hero-link hero-link-share" href="#" target="_blank" rel="noopener">Share on X</a>
     </div>
   </header>
 
@@ -221,6 +225,38 @@
     <p class="howtobuy-disclaimer">This is not financial advice. This is barely advice at all. Always verify the contract address yourself before buying anything.</p>
   </section>
 
+  <section class="buynow-section panel" id="buynow-section" aria-label="Buy now">
+    <div class="panel-header">
+      <span>buy $NIC instantly</span>
+      <span class="panel-hint">trade right here — your wallet, your funds, no redirect</span>
+    </div>
+
+    <div class="buynow-body">
+      <div class="buynow-disclaimer-box">
+        <strong>Read this before you start.</strong> This connects to a wallet extension already on your device
+        (like Phantom) — it's yours, not ours. We never see your private key or seed phrase, never hold your funds,
+        and can't recover anything if something goes wrong on your end. Only approve transactions you understand.
+      </div>
+
+      <div class="buynow-trade-layout">
+        <div class="buynow-chart-wrap">
+          <iframe
+            id="buynow-chart-frame"
+            class="buynow-chart-frame"
+            src=""
+            title="$NIC price chart"
+            loading="lazy"
+          ></iframe>
+          <p class="buynow-chart-empty" id="buynow-chart-empty">Chart will appear once your token has an active trading pair.</p>
+        </div>
+
+        <div class="buynow-swap-wrap">
+          <div id="jupiter-plugin" class="buynow-swap-target"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="meme-section panel" id="meme-section" aria-label="Meme gallery">
     <div class="panel-header">
       <span>meme gallery</span>
@@ -235,7 +271,7 @@
 
 <footer class="site-footer">
   <div class="site-footer-inner">
-    <p>Nothing is coming - has no team, no treasury, and no intentions. Nothing here is financial advice, mostly because nothing here is anything. Verify the contract address yourself before doing anything with it.</p>
+    <p>NOTHING has no team, no treasury, and no intentions. Nothing here is financial advice, mostly because nothing here is anything. Verify the contract address yourself before doing anything with it.</p>
     <p class="footer-meta">$NIC · Solana · <span id="footer-year"></span></p>
   </div>
 </footer>

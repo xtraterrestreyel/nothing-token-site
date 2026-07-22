@@ -85,6 +85,12 @@ const CONFIG = {
     "meme-9.png",
     "meme-10.png",
   ],
+
+  // "Share on X" button — no login or API key needed, this is just a
+  // pre-filled compose link. Update SHARE_URL to your Blink link once
+  // that's deployed, so shares include the one-click buy card too.
+  SHARE_TEXT: "Buying nothing has never been this easy. $NIC on Solana.",
+  SHARE_URL: "https://nothingiscoming.com/",
 };
 
 const state = {
@@ -254,6 +260,21 @@ function initContractPill() {
       a.style.pointerEvents = "none";
     });
   }
+}
+
+/* ---------------------------------------------------------
+   Share on X — a plain web intent link, no login or API key
+   required on our end. Opens X's own compose screen (app on mobile
+   if installed, web otherwise) pre-filled with text + link, already
+   signed into whichever account the visitor is using on that device.
+   --------------------------------------------------------- */
+function initShareButton() {
+  const btn = document.getElementById("link-share-x");
+  if (!btn) return;
+  const url = new URL("https://twitter.com/intent/tweet");
+  url.searchParams.set("text", CONFIG.SHARE_TEXT);
+  url.searchParams.set("url", CONFIG.SHARE_URL);
+  btn.href = url.toString();
 }
 
 /* ---------------------------------------------------------
@@ -1064,6 +1085,111 @@ function initNavScrollSpy() {
   sections.forEach((section) => observer.observe(section));
 }
 
+/* ---------------------------------------------------------
+   Nav wallet connect — lives in the persistent header so it's
+   visible everywhere on the page, not buried in one section. Shows
+   the connected address as plain text (no copy button — there's
+   nothing here that needs copying, it's just a status indicator).
+   This site never sees a private key or seed phrase at any point.
+   --------------------------------------------------------- */
+function initNavWallet() {
+  const btn = document.getElementById("nav-wallet-btn");
+  if (!btn) return;
+
+  function setConnectedUI(address) {
+    btn.textContent = shortenAddress(address);
+    btn.classList.add("connected");
+    btn.title = "Connected — click to disconnect";
+  }
+
+  function setDisconnectedUI() {
+    btn.textContent = "Connect Wallet";
+    btn.classList.remove("connected");
+    btn.title = "";
+  }
+
+  btn.addEventListener("click", async () => {
+    const provider = window?.solana;
+    if (!provider || !provider.isPhantom) {
+      window.open("https://phantom.app", "_blank", "noopener");
+      return;
+    }
+    if (provider.isConnected && provider.publicKey) {
+      try {
+        await provider.disconnect();
+      } catch (e) {
+        // Not all wallets implement disconnect() the same way — safe to ignore.
+      }
+      setDisconnectedUI();
+      return;
+    }
+    try {
+      const resp = await provider.connect();
+      setConnectedUI(resp.publicKey.toString());
+      console.log("[NOTHING] nav: Phantom connected —", resp.publicKey.toString());
+    } catch (e) {
+      console.log("[NOTHING] nav: wallet connection was cancelled");
+    }
+  });
+
+  // If Phantom is already connected from a previous visit (it remembers
+  // trusted sites), reflect that immediately instead of asking again.
+  const provider = window?.solana;
+  if (provider?.isPhantom && provider.isConnected && provider.publicKey) {
+    setConnectedUI(provider.publicKey.toString());
+  }
+}
+
+/* ---------------------------------------------------------
+   Buy Now — a real embedded swap (Jupiter Plugin) with $NIC
+   pre-loaded as the output token, plus a live price chart. No
+   redirect to pump.fun — the actual trade happens right here.
+   Jupiter Plugin handles routing, wallet connection, and sending
+   the transaction itself; this site never touches funds or keys.
+   --------------------------------------------------------- */
+const SOL_MINT_ADDRESS = "So11111111111111111111111111111111111111112";
+
+function initBuyNowChart() {
+  const frame = document.getElementById("buynow-chart-frame");
+  if (!frame || !isLikelyMintAddress(CONFIG.CONTRACT_ADDRESS)) return;
+  // Dexscreener resolves a bare token mint to its primary trading pair
+  // automatically — if the token has no pair yet, the placeholder text
+  // behind the iframe stays visible until one exists.
+  frame.src = `https://dexscreener.com/solana/${CONFIG.CONTRACT_ADDRESS}?embed=1&theme=dark&trades=0&info=0`;
+}
+
+function initJupiterSwap(attempt = 0) {
+  const targetId = "jupiter-plugin";
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  if (!isLikelyMintAddress(CONFIG.CONTRACT_ADDRESS)) {
+    target.innerHTML = `<p style="padding:24px;color:var(--dim);font-family:var(--font-mono);font-size:13px;line-height:1.6;">Set a real CONFIG.CONTRACT_ADDRESS in app.js to enable trading here.</p>`;
+    return;
+  }
+
+  if (!window.Jupiter) {
+    if (attempt > 20) {
+      console.warn("[NOTHING] buynow: Jupiter Plugin script never loaded — check your connection or an ad blocker");
+      target.innerHTML = `<p style="padding:24px;color:var(--dim);font-family:var(--font-mono);font-size:13px;line-height:1.6;">Couldn't load the trading widget — refresh the page, or check if an ad blocker is blocking plugin.jup.ag.</p>`;
+      return;
+    }
+    setTimeout(() => initJupiterSwap(attempt + 1), 250);
+    return;
+  }
+
+  window.Jupiter.init({
+    displayMode: "integrated",
+    integratedTargetId: targetId,
+    formProps: {
+      initialInputMint: SOL_MINT_ADDRESS,
+      initialOutputMint: CONFIG.CONTRACT_ADDRESS,
+      fixedMint: CONFIG.CONTRACT_ADDRESS,
+    },
+  });
+  console.log("[NOTHING] buynow: Jupiter Plugin initialized for", CONFIG.CONTRACT_ADDRESS);
+}
+
 function initMemeAutoScroll() {
   const scroll = document.getElementById("meme-scroll");
   if (!scroll) return;
@@ -1836,10 +1962,14 @@ function init() {
   initVoidField();
   initGlitch();
   initContractPill();
+  initShareButton();
   initAgeCounter();
   renderMemeGallery();
   initMascotImage();
   initMemeAutoScroll();
+  initBuyNowChart();
+  initJupiterSwap();
+  initNavWallet();
   initNavScrollSpy();
 
   const hasMint = isLikelyMintAddress(CONFIG.CONTRACT_ADDRESS);
