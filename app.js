@@ -90,7 +90,7 @@ const CONFIG = {
   // pre-filled compose link. Update SHARE_URL to your Blink link once
   // that's deployed, so shares include the one-click buy card too.
   SHARE_TEXT: "Buying nothing has never been this easy. $NIC on Solana.",
-  SHARE_URL: "https://nothingiscoming.com/",
+  SHARE_URL: "https://dial.to/?action=solana-action:https://nothingiscoming.com/actions/buy-nic",
 };
 
 const state = {
