@@ -1,0 +1,12 @@
+{
+  "rules": [
+    {
+      "pathPattern": "/actions/buy-nic",
+      "apiPath": "https://nic-blink.extraterrestreyel.workers.dev/actions/buy-nic"
+    },
+    {
+      "pathPattern": "/actions.json",
+      "apiPath": "/actions.json"
+    }
+  ]
+}
