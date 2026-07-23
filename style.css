@@ -278,6 +278,15 @@ main {
   border-color: rgba(20, 241, 149, 0.4);
 }
 
+.nav-lounge-link {
+  color: var(--violet) !important;
+  border-color: rgba(156, 123, 255, 0.35) !important;
+}
+.nav-lounge-link:hover {
+  background: rgba(156, 123, 255, 0.15) !important;
+  border-color: var(--violet) !important;
+}
+
 .nav-pulse-indicator {
   flex-shrink: 0;
   display: flex;
