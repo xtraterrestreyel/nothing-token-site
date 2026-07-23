@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lounge — $NIC</title>
+<meta name="description" content="The $NIC Lounge — holder-gated tournaments, leaderboards, and a place to hang out. Bragging rights only, no wagering." />
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2230%22 fill=%22none%22 stroke=%22%2314F195%22 stroke-width=%228%22/></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="lounge.css" />
+</head>
+<body>
+
+<canvas id="void-field" aria-hidden="true"></canvas>
+
+<div class="brand-watermark" aria-hidden="true"></div>
+
+<div class="scan-overlay" aria-hidden="true"></div>
+
+<nav class="site-nav" id="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="index.html">$NIC</a>
+    <div class="site-nav-links">
+      <a href="index.html#pulse-section">Pulse</a>
+      <a href="index.html#curve-section">Curve</a>
+      <a href="index.html#feed-section">Feed</a>
+      <a href="index.html#lineage-section">Holder Tree</a>
+      <a href="index.html#howtobuy-section">How to Buy</a>
+      <a href="index.html#buynow-section">Buy Now</a>
+      <a href="index.html#meme-section">Gallery</a>
+      <a href="lounge.html" class="nav-lounge-link active">Lounge</a>
+    </div>
+    <div class="nav-pulse-indicator" id="nav-pulse-indicator" title="Live buy/sell indicator">
+      <svg viewBox="0 0 40 40" width="26" height="26">
+        <circle class="nav-pulse-core" cx="20" cy="20" r="15" />
+        <path class="nav-pulse-arrow nav-pulse-arrow-up" d="M20,9 L12,21 L17,21 L17,30 L23,30 L23,21 L28,21 Z" />
+        <path class="nav-pulse-arrow nav-pulse-arrow-down" d="M20,31 L12,19 L17,19 L17,10 L23,10 L23,19 L28,19 Z" />
+      </svg>
+    </div>
+    <button class="nav-wallet-btn" id="nav-wallet-btn">Connect Wallet</button>
+  </div>
+</nav>
+
+<main id="top">
+
+  <header class="lounge-hero">
+    <h1 class="lounge-title">$NIC Lounge</h1>
+    <p class="lounge-tagline">Bragging rights only. No wagering, no entry fees, no payouts — just tournaments, a leaderboard, and a place to hang out.</p>
+  </header>
+
+  <section class="panel lounge-tier-panel" aria-label="Your tier">
+    <div class="panel-header">
+      <span>your tier</span>
+      <span class="panel-hint" id="tier-hint">connect your wallet to check</span>
+    </div>
+    <div class="lounge-tier-body">
+      <div class="lounge-tier-status" id="lounge-tier-status">
+        <p class="lounge-tier-status-text" id="lounge-tier-status-text">Connect your wallet above to see which tournaments you're eligible for.</p>
+      </div>
+      <div class="lounge-tier-grid" id="lounge-tier-grid"></div>
+    </div>
+  </section>
+
+  <section class="panel lounge-poker-panel" aria-label="Poker tables">
+    <div class="panel-header">
+      <span>poker table</span>
+      <span class="panel-hint" id="poker-hint">connect your wallet above to join</span>
+    </div>
+    <div class="poker-body">
+      <div class="poker-join-row" id="poker-join-row">
+        <p class="poker-connect-note">Connect your wallet above to see the table.</p>
+      </div>
+      <div class="poker-table-wrap" id="poker-table-wrap" hidden>
+        <div class="poker-seats-row poker-seats-top" id="poker-seats-top"></div>
+        <div class="poker-felt-middle">
+          <div class="poker-phase" id="poker-phase">waiting</div>
+          <div class="poker-community" id="poker-community"></div>
+          <div class="poker-pot" id="poker-pot">Pot: 0</div>
+        </div>
+        <div class="poker-seats-row poker-seats-bottom" id="poker-seats-bottom"></div>
+        <div class="poker-actions" id="poker-actions"></div>
+        <div class="poker-log" id="poker-log"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel lounge-leaderboard-panel" aria-label="Leaderboard">
+    <div class="panel-header">
+      <span>leaderboard</span>
+      <span class="panel-hint">bragging rights, permanently archived</span>
+    </div>
+    <div class="lounge-leaderboard-tabs">
+      <button class="lounge-tab active" data-tab="weekly">This Week</button>
+      <button class="lounge-tab" data-tab="monthly">This Month</button>
+      <button class="lounge-tab" data-tab="hall">Hall of Nothing</button>
+    </div>
+    <div class="lounge-leaderboard-body" id="lounge-leaderboard-body">
+      <p class="lounge-leaderboard-empty">No tournaments have run yet — this fills in once the tables open.</p>
+    </div>
+  </section>
+
+  <section class="panel lounge-chat-panel" aria-label="Lounge chat">
+    <div class="panel-header">
+      <span>lounge chat</span>
+      <span class="panel-hint">connecting soon</span>
+    </div>
+    <div class="lounge-coming-soon">
+      <p class="lounge-coming-soon-title">Live chat is being wired up alongside the poker tables.</p>
+      <p class="lounge-coming-soon-desc">Same backend build as the dealer engine above — coming together at the same time.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p>The Lounge has no entry fees, no wagering, and no payouts of any kind. Tournament eligibility is based on holding $NIC, not spending it. Prizes, when introduced, will be non-monetary recognition only.</p>
+    <p class="footer-meta">$NIC · Solana · <span id="footer-year"></span></p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+<script src="lounge.js"></script>
+<script src="poker.js"></script>
+</body>
+</html>

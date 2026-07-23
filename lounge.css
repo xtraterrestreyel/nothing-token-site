@@ -1,0 +1,414 @@
+/* ==========================================================
+   Lounge — reuses style.css's variables, .panel, .panel-header,
+   nav, and footer styles. Everything here is Lounge-specific.
+   ========================================================== */
+
+.lounge-hero {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.lounge-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(40px, 9vw, 76px);
+  color: var(--paper);
+  margin: 0;
+}
+
+.lounge-tagline {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--dim);
+  max-width: 640px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------- tier panel ---------- */
+.lounge-tier-body {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lounge-tier-status {
+  border: 1px solid var(--line);
+  background: var(--void-2);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.lounge-tier-status-text {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--dim);
+  line-height: 1.6;
+}
+.lounge-tier-status-text.qualified { color: var(--buy); }
+
+.lounge-tier-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 760px) {
+  .lounge-tier-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.lounge-tier-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  background: var(--void-2);
+  transition: border-color 0.15s ease;
+}
+.lounge-tier-card.unlocked {
+  border-color: rgba(20, 241, 149, 0.4);
+  background: rgba(20, 241, 149, 0.05);
+}
+
+.lounge-tier-name {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--paper);
+  margin: 0 0 6px;
+}
+.lounge-tier-card.unlocked .lounge-tier-name { color: var(--buy); }
+
+.lounge-tier-req {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--dim);
+  margin: 0 0 10px;
+}
+
+.lounge-tier-desc {
+  font-size: 14px;
+  color: var(--dim);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.lounge-tier-badge {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--buy);
+  border: 1px solid rgba(20, 241, 149, 0.4);
+  background: rgba(20, 241, 149, 0.1);
+  border-radius: 100px;
+  padding: 4px 10px;
+}
+
+/* ---------- coming soon panels (poker, chat) ---------- */
+.lounge-coming-soon {
+  padding: 30px 24px;
+  text-align: center;
+}
+.lounge-coming-soon-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--violet);
+  margin: 0 0 8px;
+}
+.lounge-coming-soon-desc {
+  font-size: 14px;
+  color: var(--dim);
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ---------- leaderboard ---------- */
+.lounge-leaderboard-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px 0;
+}
+.lounge-tab {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--dim);
+  background: var(--void-2);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.lounge-tab:hover {
+  color: var(--paper);
+}
+.lounge-tab.active {
+  color: var(--buy);
+  border-color: rgba(20, 241, 149, 0.4);
+  background: rgba(20, 241, 149, 0.1);
+}
+
+.lounge-leaderboard-body {
+  padding: 20px 24px 26px;
+}
+.lounge-leaderboard-empty {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+}
+
+.lounge-leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+.lounge-leaderboard-row:last-child { border-bottom: none; }
+.lounge-leaderboard-rank {
+  width: 28px;
+  flex-shrink: 0;
+  color: var(--violet);
+  font-weight: 700;
+}
+.lounge-leaderboard-wallet {
+  flex: 1;
+  color: var(--paper);
+}
+.lounge-leaderboard-score {
+  color: var(--dim);
+}
+
+/* ---------- poker table ---------- */
+.poker-body {
+  padding: 20px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.poker-connect-note {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.poker-table-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.poker-seats-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.poker-felt-middle {
+  background: radial-gradient(ellipse at center, rgba(20,241,149,0.06), var(--void-2) 75%);
+  border: 2px solid rgba(20,241,149,0.18);
+  border-radius: 100px / 40px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 110px;
+  justify-content: center;
+}
+
+.poker-phase {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.poker-community {
+  display: flex;
+  gap: 6px;
+  min-height: 44px;
+}
+
+.poker-pot {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--buy);
+  font-size: 15px;
+}
+
+.poker-card {
+  width: 32px;
+  height: 44px;
+  border-radius: 5px;
+  background: var(--paper);
+  color: var(--void);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.poker-card.red { color: var(--sell); }
+.poker-card.face-down {
+  background: linear-gradient(135deg, var(--violet), var(--buy));
+  opacity: 0.35;
+}
+
+.poker-seat {
+  width: 150px;
+  min-height: 120px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--void-2);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.poker-seat.empty {
+  justify-content: center;
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: center;
+  border-style: dashed;
+}
+.poker-seat.dealer { border-color: rgba(156,123,255,0.5); }
+.poker-seat.to-act {
+  border-color: var(--buy);
+  box-shadow: 0 0 0 2px rgba(20,241,149,0.2), 0 0 20px rgba(20,241,149,0.15);
+}
+.poker-seat.folded { opacity: 0.45; }
+.poker-seat.is-me { border-color: rgba(20,241,149,0.5); }
+
+.poker-seat-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--paper);
+  font-weight: 700;
+}
+.poker-seat-chips {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--buy);
+}
+.poker-seat-bet {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--violet);
+}
+.poker-seat-cards {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+.poker-seat-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--sell);
+  text-transform: uppercase;
+}
+
+.poker-sit-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--void);
+  background: linear-gradient(90deg, var(--violet), var(--buy));
+  border: none;
+  border-radius: 100px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.poker-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+.poker-action-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 100px;
+  border: 1px solid var(--line);
+  background: var(--void-2);
+  color: var(--paper);
+  cursor: pointer;
+}
+.poker-action-btn:hover { border-color: var(--violet); }
+.poker-fold-btn { color: var(--sell); border-color: rgba(255,68,104,0.35); }
+.poker-raise-wrap { display: flex; gap: 6px; align-items: center; }
+.poker-raise-input {
+  width: 80px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--void-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--paper);
+  padding: 8px;
+}
+.poker-raise-btn { color: var(--buy); border-color: rgba(20,241,149,0.4); }
+.poker-waiting-note {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  margin: 0;
+}
+.poker-leave-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--sell);
+  background: rgba(255,68,104,0.08);
+  border: 1px solid rgba(255,68,104,0.35);
+  border-radius: 100px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.poker-log {
+  max-height: 140px;
+  overflow-y: auto;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.poker-log-line, .poker-log-error {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+.poker-log-error { color: var(--sell); }
+
+@media (max-width: 480px) {
+  .poker-seat { width: 100%; max-width: 220px; }
+}
