@@ -34,7 +34,7 @@
    ========================================================= */
 
 const CONFIG = {
-  CONTRACT_ADDRESS: "REPLACE_WITH_YOUR_CONTRACT_ADDRESS", // <-- set this
+  CONTRACT_ADDRESS: "9bvi3AgBNSYtMFpTaqPUrhTxY9vd7MpfsTPortTXpump", // <-- set this
   LAUNCH_DATE: "2026-07-19T00:00:00Z",                     // <-- set this
 
   // IMPORTANT — Solana's public endpoint (api.mainnet-beta.solana.com)
@@ -50,7 +50,7 @@ const CONFIG = {
   // rate-limited per key, so the worst case if someone copies it is
   // your free quota gets used up faster; you can regenerate the key
   // anytime from the Helius dashboard if that happens.
-  RPC_ENDPOINT: "https://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_API_KEY",
+  RPC_ENDPOINT: "https://mainnet.helius-rpc.com/?api-key=5904e072-7870-4664-943c-db1469731658",
 
   // Only used as a fallback if the live WebSocket subscription can't
   // connect (see startLiveFeed). Not used at all in the normal path.
