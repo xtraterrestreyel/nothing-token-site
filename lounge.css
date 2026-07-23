@@ -236,8 +236,11 @@
   display: grid;
   gap: 14px;
   align-items: center;
+  justify-items: center;
   justify-content: center;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  max-width: 640px;
+  margin: 0 auto;
+  grid-template-columns: 90px minmax(180px, 300px) minmax(180px, 300px) 90px;
   grid-template-areas:
     ".    s0   s1   ."
     "s5   felt felt s2"
@@ -276,6 +279,17 @@
   }
   #poker-seat-container-5 .poker-seat {
     flex-direction: column-reverse;
+  }
+
+  /* An actual oval curve: the middle seat of each row (#2 top, #5
+     bottom) sits flat and centered — the flattened ends of the oval —
+     while the corner seats (#1/#3 top, #4/#6 bottom) tuck in slightly
+     toward the felt, following the curve round toward the sides. */
+  #poker-seat-container-0, #poker-seat-container-2 {
+    transform: translateY(14px);
+  }
+  #poker-seat-container-3, #poker-seat-container-5 {
+    transform: translateY(-14px);
   }
 }
 
