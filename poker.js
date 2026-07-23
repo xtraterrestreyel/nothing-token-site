@@ -298,27 +298,36 @@ function renderPokerTable(state) {
     state.phase === "waiting" ? "waiting for players\u2026" : state.phase;
   document.getElementById("poker-pot").textContent = `Pot: ${state.pot}`;
 
-  const communityEl = document.getElementById("poker-community");
-  communityEl.innerHTML = "";
-  state.community.forEach((c) => communityEl.appendChild(cardEl(c, false)));
+  // Always exactly 5 slots (3 flop / 1 turn / 1 river), whether or not
+  // that many cards have actually been dealt yet — a dashed placeholder
+  // fills any slot that isn't dealt. This is what keeps the table a
+  // constant size the whole hand through, instead of growing street by
+  // street as cards get added.
+  function renderSlots(containerId, indices) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = "";
+    indices.forEach((i) => {
+      const card = state.community[i];
+      if (card !== undefined) {
+        el.appendChild(cardEl(card, false));
+      } else {
+        const placeholder = document.createElement("div");
+        placeholder.className = "poker-card poker-card-placeholder";
+        el.appendChild(placeholder);
+      }
+    });
+  }
+  renderSlots("poker-flop-cards", [0, 1, 2]);
+  renderSlots("poker-turn-cards", [3]);
+  renderSlots("poker-river-cards", [4]);
 
-  // Purely cosmetic arrangement — seat numbers are just server-side turn
-  // order, this just decides where each one visually sits around the felt.
-  const seatLayout = {
-    top: [0, 1],
-    left: [5],
-    right: [2],
-    bottom: [3, 4],
-  };
-  const containers = {
-    top: document.getElementById("poker-seats-top"),
-    left: document.getElementById("poker-seats-left"),
-    right: document.getElementById("poker-seats-right"),
-    bottom: document.getElementById("poker-seats-bottom"),
-  };
-  Object.values(containers).forEach((c) => (c.innerHTML = ""));
-  for (const [position, seatIndices] of Object.entries(seatLayout)) {
-    seatIndices.forEach((i) => containers[position].appendChild(renderSeat(state, i)));
+  // Each seat has its own fixed container in the grid (poker-ring in the
+  // CSS handles WHERE that container visually sits, differently on
+  // mobile vs desktop) — this just fills each one with that seat's data.
+  for (let i = 0; i < MAX_SEATS; i++) {
+    const container = document.getElementById(`poker-seat-container-${i}`);
+    container.innerHTML = "";
+    container.appendChild(renderSeat(state, i));
   }
 
   renderStartButton(state);

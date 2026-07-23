@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="lounge.css?v=4" />
+<link rel="stylesheet" href="lounge.css?v=5" />
 </head>
 <body>
 
@@ -79,19 +79,34 @@
         <p class="poker-connect-note">Connect your wallet above to see the table.</p>
       </div>
       <div class="poker-table-wrap" id="poker-table-wrap" hidden>
-        <div class="poker-seats-row poker-seats-top" id="poker-seats-top"></div>
-        <div class="poker-middle-row">
-          <div class="poker-seats-side poker-seats-left" id="poker-seats-left"></div>
+        <div class="poker-ring" id="poker-ring">
+          <div class="poker-seat-container" id="poker-seat-container-0"></div>
+          <div class="poker-seat-container" id="poker-seat-container-1"></div>
+          <div class="poker-seat-container" id="poker-seat-container-2"></div>
+          <div class="poker-seat-container" id="poker-seat-container-3"></div>
+          <div class="poker-seat-container" id="poker-seat-container-4"></div>
+          <div class="poker-seat-container" id="poker-seat-container-5"></div>
           <div class="poker-felt-rail">
             <div class="poker-felt-middle">
               <div class="poker-phase" id="poker-phase">waiting</div>
-              <div class="poker-community" id="poker-community"></div>
+              <div class="poker-community" id="poker-community">
+                <div class="poker-community-group" id="poker-flop-group">
+                  <div class="poker-community-cards" id="poker-flop-cards"></div>
+                  <div class="poker-community-label">Flop</div>
+                </div>
+                <div class="poker-community-group" id="poker-turn-group">
+                  <div class="poker-community-cards" id="poker-turn-cards"></div>
+                  <div class="poker-community-label">Turn</div>
+                </div>
+                <div class="poker-community-group" id="poker-river-group">
+                  <div class="poker-community-cards" id="poker-river-cards"></div>
+                  <div class="poker-community-label">River</div>
+                </div>
+              </div>
               <div class="poker-pot" id="poker-pot">Pot: 0</div>
             </div>
           </div>
-          <div class="poker-seats-side poker-seats-right" id="poker-seats-right"></div>
         </div>
-        <div class="poker-seats-row poker-seats-bottom" id="poker-seats-bottom"></div>
         <div class="poker-start-row" id="poker-start-row"></div>
         <div class="poker-actions" id="poker-actions"></div>
         <div class="poker-log" id="poker-log"></div>
@@ -135,7 +150,7 @@
 </footer>
 
 <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
-<script src="lounge.js?v=4"></script>
-<script src="poker.js?v=4"></script>
+<script src="lounge.js?v=5"></script>
+<script src="poker.js?v=5"></script>
 </body>
 </html>

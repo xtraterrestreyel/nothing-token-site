@@ -232,34 +232,51 @@
   display: none;
 }
 
-.poker-seats-row {
-  display: flex;
-  gap: 12px;
+.poker-ring {
+  display: grid;
+  gap: 14px;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    ".    s0   s1   ."
+    "s5   felt felt s2"
+    ".    s4   s3   .";
 }
+#poker-seat-container-0 { grid-area: s0; }
+#poker-seat-container-1 { grid-area: s1; }
+#poker-seat-container-2 { grid-area: s2; }
+#poker-seat-container-3 { grid-area: s3; }
+#poker-seat-container-4 { grid-area: s4; }
+#poker-seat-container-5 { grid-area: s5; }
+.poker-felt-rail { grid-area: felt; }
 
 /* Every seat stacks bubble-then-cards top-to-bottom by default, which
-   reads correctly for the top row (cards land between the seat and the
-   table below it) but backwards for the bottom row (cards would land
-   below the seat, pointing AWAY from the table instead of toward it).
-   Flipping the stack order for the bottom row only keeps cards facing
-   the table on every seat, regardless of which row it's in. */
-.poker-seats-bottom .poker-seat {
+   reads correctly for a seat above the table (cards land between the
+   seat and the table) but backwards for a seat below it (cards would
+   point AWAY from the table instead of toward it). Flipping the stack
+   order for whichever seats sit below the felt keeps cards facing the
+   table regardless of position. On desktop, 3 and 4 are the bottom row;
+   the mobile media query below adds 5 to that list, since it moves from
+   a side seat to a bottom-row seat once the layout changes. */
+#poker-seat-container-3 .poker-seat,
+#poker-seat-container-4 .poker-seat {
   flex-direction: column-reverse;
 }
 
-.poker-middle-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.poker-seats-side {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+@media (max-width: 480px) {
+  /* No side seats on mobile — the felt is too narrow to keep them from
+     stacking awkwardly. 3 across the top, 3 across the bottom instead. */
+  .poker-ring {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      "s0   s1   s2"
+      "felt felt felt"
+      "s3   s4   s5";
+  }
+  #poker-seat-container-5 .poker-seat {
+    flex-direction: column-reverse;
+  }
 }
 
 .poker-start-row {
@@ -285,15 +302,18 @@
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
 }
 
+/* The felt's size is now driven entirely by the fixed 5-card-slot layout
+   below (via poker-community's fixed width, not by however many cards
+   happen to be dealt) — so the table itself no longer grows or shrinks
+   over the course of a hand. */
 .poker-felt-middle {
   background: radial-gradient(ellipse at center, rgba(20,241,149,0.08), var(--void-2) 78%);
   border-radius: 100px / 38px;
-  padding: 30px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  min-height: 165px;
   justify-content: center;
 }
 
@@ -305,10 +325,38 @@
   color: var(--violet);
 }
 
+/* Fixed-size placement area — always exactly 5 card slots, grouped into
+   flop (3) / turn (1) / river (1) with real poker-table-style gaps and
+   labels between the groups, exactly like felt markings on a real table.
+   This is what keeps the table a constant size the whole hand through,
+   rather than growing as each street gets dealt. */
 .poker-community {
   display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.poker-community-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 6px;
-  min-height: 44px;
+}
+.poker-community-cards {
+  display: flex;
+  gap: 6px;
+}
+.poker-community-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.poker-card-placeholder {
+  background: transparent !important;
+  border: 2px dashed rgba(236,234,228,0.18);
+  box-shadow: none !important;
 }
 
 .poker-pot {
@@ -522,13 +570,14 @@
 
 @media (max-width: 480px) {
   .poker-body { padding: 14px 12px 18px; gap: 10px; }
-  .poker-seats-row { gap: 8px; }
-  .poker-middle-row { gap: 8px; }
+  .poker-ring { gap: 8px; }
   .poker-seat { width: 58px; }
   .poker-seat-bubble { width: 52px; height: 52px; overflow: hidden; }
   .poker-seat-name { font-size: 8px; }
   .poker-seat-chips { font-size: 9px; }
-  .poker-felt-middle { padding: 18px 15px; min-height: 135px; gap: 9px; }
-  #poker-community .poker-card { width: 45px; height: 63px; font-size: 18px; }
-  .poker-pot { font-size: 16px; }
+  .poker-felt-middle { padding: 16px 10px; gap: 8px; }
+  .poker-community { gap: 8px; }
+  .poker-community-cards .poker-card { width: 30px; height: 42px; font-size: 12px; }
+  .poker-community-label { font-size: 7px; }
+  .poker-pot { font-size: 15px; }
 }
