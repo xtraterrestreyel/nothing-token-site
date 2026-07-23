@@ -108,15 +108,18 @@ function renderSeat(state, seatIndex) {
 
   if (!seat) {
     wrap.classList.add("empty");
+    const bubble = document.createElement("div");
+    bubble.className = "poker-seat-bubble";
     if (state.mySeat === null && pokerConnectedWallet) {
       const btn = document.createElement("button");
       btn.className = "poker-sit-btn";
-      btn.textContent = `Sit (Seat ${seatIndex + 1})`;
+      btn.textContent = "Sit";
       btn.addEventListener("click", () => joinSeat(seatIndex));
-      wrap.appendChild(btn);
+      bubble.appendChild(btn);
     } else {
-      wrap.textContent = `Seat ${seatIndex + 1} \u2014 open`;
+      bubble.textContent = `#${seatIndex + 1}`;
     }
+    wrap.appendChild(bubble);
     return wrap;
   }
 
@@ -132,15 +135,20 @@ function renderSeat(state, seatIndex) {
   if (seat.folded) wrap.classList.add("folded");
   if (seatIndex === state.mySeat) wrap.classList.add("is-me");
 
+  const bubble = document.createElement("div");
+  bubble.className = "poker-seat-bubble";
+
   const nameEl = document.createElement("div");
   nameEl.className = "poker-seat-name";
-  nameEl.textContent = pokerShortWallet(seat.wallet) + (seatIndex === state.mySeat ? " (you)" : "");
-  wrap.appendChild(nameEl);
+  nameEl.textContent = seatIndex === state.mySeat ? "You" : pokerShortWallet(seat.wallet);
+  bubble.appendChild(nameEl);
 
   const chipsEl = document.createElement("div");
   chipsEl.className = "poker-seat-chips";
-  chipsEl.textContent = `${seat.chips} chips`;
-  wrap.appendChild(chipsEl);
+  chipsEl.textContent = seat.chips;
+  bubble.appendChild(chipsEl);
+
+  wrap.appendChild(bubble);
 
   if (seat.committedThisRound > 0) {
     const betEl = document.createElement("div");
@@ -177,6 +185,22 @@ function renderSeat(state, seatIndex) {
   }
 
   return wrap;
+}
+
+function seatedCount(state) {
+  return state.seats.filter((s) => s && s.chips > 0).length;
+}
+
+function renderStartButton(state) {
+  const container = document.getElementById("poker-start-row");
+  container.innerHTML = "";
+  if (state.phase !== "waiting" || seatedCount(state) < 2) return;
+
+  const btn = document.createElement("button");
+  btn.className = "poker-start-btn";
+  btn.textContent = "Start Game";
+  btn.addEventListener("click", () => sendPokerMessage({ type: "start" }));
+  container.appendChild(btn);
 }
 
 function renderActions(state) {
@@ -259,15 +283,26 @@ function renderPokerTable(state) {
   communityEl.innerHTML = "";
   state.community.forEach((c) => communityEl.appendChild(cardEl(c, false)));
 
-  const topRow = document.getElementById("poker-seats-top");
-  const bottomRow = document.getElementById("poker-seats-bottom");
-  topRow.innerHTML = "";
-  bottomRow.innerHTML = "";
-  for (let i = 0; i < MAX_SEATS; i++) {
-    const seatEl = renderSeat(state, i);
-    (i < MAX_SEATS / 2 ? topRow : bottomRow).appendChild(seatEl);
+  // Purely cosmetic arrangement — seat numbers are just server-side turn
+  // order, this just decides where each one visually sits around the felt.
+  const seatLayout = {
+    top: [0, 1],
+    left: [5],
+    right: [2],
+    bottom: [3, 4],
+  };
+  const containers = {
+    top: document.getElementById("poker-seats-top"),
+    left: document.getElementById("poker-seats-left"),
+    right: document.getElementById("poker-seats-right"),
+    bottom: document.getElementById("poker-seats-bottom"),
+  };
+  Object.values(containers).forEach((c) => (c.innerHTML = ""));
+  for (const [position, seatIndices] of Object.entries(seatLayout)) {
+    seatIndices.forEach((i) => containers[position].appendChild(renderSeat(state, i)));
   }
 
+  renderStartButton(state);
   renderActions(state);
 
   if (state.lastShowdown && state.phase === "showdown") {
