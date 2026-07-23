@@ -120,7 +120,14 @@ function renderSeat(state, seatIndex) {
     return wrap;
   }
 
-  if (seatIndex === state.dealerSeat) wrap.classList.add("dealer");
+  if (seatIndex === state.dealerSeat) {
+    wrap.classList.add("dealer");
+    const dealerBtn = document.createElement("div");
+    dealerBtn.className = "poker-dealer-button";
+    dealerBtn.textContent = "D";
+    dealerBtn.title = "Dealer";
+    wrap.appendChild(dealerBtn);
+  }
   if (seatIndex === state.toActSeat) wrap.classList.add("to-act");
   if (seat.folded) wrap.classList.add("folded");
   if (seatIndex === state.mySeat) wrap.classList.add("is-me");
@@ -152,7 +159,12 @@ function renderSeat(state, seatIndex) {
   }
   wrap.appendChild(cardsRow);
 
-  if (seat.allIn) {
+  if (seat.disconnected) {
+    const tag = document.createElement("div");
+    tag.className = "poker-seat-tag poker-seat-tag-disconnected";
+    tag.textContent = "RECONNECTING\u2026";
+    wrap.appendChild(tag);
+  } else if (seat.allIn) {
     const tag = document.createElement("div");
     tag.className = "poker-seat-tag";
     tag.textContent = "ALL IN";

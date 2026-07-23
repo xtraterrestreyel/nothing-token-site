@@ -212,6 +212,9 @@
   flex-direction: column;
   gap: 16px;
 }
+.poker-table-wrap[hidden] {
+  display: none;
+}
 
 .poker-seats-row {
   display: flex;
@@ -220,16 +223,22 @@
   flex-wrap: wrap;
 }
 
+.poker-felt-rail {
+  background: linear-gradient(135deg, var(--violet), var(--buy));
+  border-radius: 100px / 42px;
+  padding: 7px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+}
+
 .poker-felt-middle {
-  background: radial-gradient(ellipse at center, rgba(20,241,149,0.06), var(--void-2) 75%);
-  border: 2px solid rgba(20,241,149,0.18);
-  border-radius: 100px / 40px;
-  padding: 20px;
+  background: radial-gradient(ellipse at center, rgba(20,241,149,0.08), var(--void-2) 78%);
+  border-radius: 100px / 38px;
+  padding: 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  min-height: 110px;
+  gap: 10px;
+  min-height: 130px;
   justify-content: center;
 }
 
@@ -251,13 +260,14 @@
   font-family: var(--font-mono);
   font-weight: 700;
   color: var(--buy);
-  font-size: 15px;
+  font-size: 18px;
+  letter-spacing: 0.02em;
 }
 
 .poker-card {
-  width: 32px;
-  height: 44px;
-  border-radius: 5px;
+  width: 48px;
+  height: 66px;
+  border-radius: 7px;
   background: var(--paper);
   color: var(--void);
   display: flex;
@@ -265,8 +275,9 @@
   justify-content: center;
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 19px;
   flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.35);
 }
 .poker-card.red { color: var(--sell); }
 .poker-card.face-down {
@@ -275,6 +286,7 @@
 }
 
 .poker-seat {
+  position: relative;
   width: 150px;
   min-height: 120px;
   border: 1px solid var(--line);
@@ -296,6 +308,24 @@
   border-style: dashed;
 }
 .poker-seat.dealer { border-color: rgba(156,123,255,0.5); }
+.poker-dealer-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5efd8, #d8c98a);
+  color: #05050a;
+  border: 2px solid #05050a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+}
 .poker-seat.to-act {
   border-color: var(--buy);
   box-shadow: 0 0 0 2px rgba(20,241,149,0.2), 0 0 20px rgba(20,241,149,0.15);
@@ -330,6 +360,9 @@
   letter-spacing: 0.08em;
   color: var(--sell);
   text-transform: uppercase;
+}
+.poker-seat-tag-disconnected {
+  color: var(--violet);
 }
 
 .poker-sit-btn {
