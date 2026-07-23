@@ -42,6 +42,10 @@ function cardEl(cardInt, faceDown) {
   return el;
 }
 
+function seatedStorageKey(wallet) {
+  return `nic_poker_seated_${wallet}`;
+}
+
 function connectPokerSocket(wallet) {
   if (pokerSocket && pokerSocket.readyState <= 1) return; // already connecting/open
   pokerConnectedWallet = wallet;
@@ -50,12 +54,24 @@ function connectPokerSocket(wallet) {
 
   pokerSocket.addEventListener("open", () => {
     console.log("[NOTHING poker] connected to table");
+    // If this wallet was already seated before this connection dropped
+    // (a refresh, a closed tab, a lost signal), automatically re-announce
+    // it — the server matches by wallet first and resumes the existing
+    // seat, chips and all, rather than needing you to click anything.
+    // Without this, a refresh left you stuck: a new anonymous connection
+    // with no button anywhere to reclaim a seat that isn't empty.
+    if (localStorage.getItem(seatedStorageKey(wallet)) === "true") {
+      sendPokerMessage({ type: "join", wallet, seatIndex: 0 });
+    }
   });
 
   pokerSocket.addEventListener("message", (event) => {
     const msg = JSON.parse(event.data);
     if (msg.type === "state") {
       pokerLastState = msg.state;
+      if (msg.state.mySeat !== null) {
+        localStorage.setItem(seatedStorageKey(wallet), "true");
+      }
       renderPokerTable(msg.state);
     } else if (msg.type === "error") {
       console.warn("[NOTHING poker] server error:", msg.message);
@@ -95,6 +111,9 @@ function joinSeat(seatIndex) {
 
 function leaveSeat() {
   sendPokerMessage({ type: "leave" });
+  if (pokerConnectedWallet) {
+    localStorage.removeItem(seatedStorageKey(pokerConnectedWallet));
+  }
 }
 
 function sendAction(action, amount) {

@@ -239,6 +239,16 @@
   flex-wrap: wrap;
 }
 
+/* Every seat stacks bubble-then-cards top-to-bottom by default, which
+   reads correctly for the top row (cards land between the seat and the
+   table below it) but backwards for the bottom row (cards would land
+   below the seat, pointing AWAY from the table instead of toward it).
+   Flipping the stack order for the bottom row only keeps cards facing
+   the table on every seat, regardless of which row it's in. */
+.poker-seats-bottom .poker-seat {
+  flex-direction: column-reverse;
+}
+
 .poker-middle-row {
   display: flex;
   align-items: center;
