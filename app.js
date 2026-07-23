@@ -34,7 +34,7 @@
    ========================================================= */
 
 const CONFIG = {
-  CONTRACT_ADDRESS: "9bvi3AgBNSYtMFpTaqPUrhTxY9vd7MpfsTPortTXpump", // <-- set this
+  CONTRACT_ADDRESS: "REPLACE_WITH_YOUR_CONTRACT_ADDRESS", // <-- set this
   LAUNCH_DATE: "2026-07-19T00:00:00Z",                     // <-- set this
 
   // IMPORTANT — Solana's public endpoint (api.mainnet-beta.solana.com)
@@ -50,7 +50,7 @@ const CONFIG = {
   // rate-limited per key, so the worst case if someone copies it is
   // your free quota gets used up faster; you can regenerate the key
   // anytime from the Helius dashboard if that happens.
-  RPC_ENDPOINT: "https://mainnet.helius-rpc.com/?api-key=5904e072-7870-4664-943c-db1469731658",
+  RPC_ENDPOINT: "https://mainnet.helius-rpc.com/?api-key=YOUR_HELIUS_API_KEY",
 
   // Only used as a fallback if the live WebSocket subscription can't
   // connect (see startLiveFeed). Not used at all in the normal path.
@@ -90,7 +90,7 @@ const CONFIG = {
   // pre-filled compose link. Update SHARE_URL to your Blink link once
   // that's deployed, so shares include the one-click buy card too.
   SHARE_TEXT: "Buying nothing has never been this easy. $NIC on Solana.",
-  SHARE_URL: "https://dial.to/?action=solana-action:https://nothingiscoming.com/actions/buy-nic",
+  SHARE_URL: "https://nothingiscoming.com/",
 };
 
 const state = {
@@ -1132,12 +1132,36 @@ function initNavWallet() {
     }
   });
 
-  // If Phantom is already connected from a previous visit (it remembers
-  // trusted sites), reflect that immediately instead of asking again.
+  // If Phantom already trusts this site from a previous visit, silently
+  // reconnect without a popup, instead of just checking isConnected
+  // (which resets to false on every fresh page load regardless of
+  // prior trust — checking it alone was why this needed reconnecting
+  // every time you navigated to a new page).
   const provider = window?.solana;
-  if (provider?.isPhantom && provider.isConnected && provider.publicKey) {
-    setConnectedUI(provider.publicKey.toString());
+  if (provider?.isPhantom) {
+    provider.connect({ onlyIfTrusted: true })
+      .then((resp) => setConnectedUI(resp.publicKey.toString()))
+      .catch(() => {
+        // Not previously trusted, or user needs to connect manually — fine, no-op.
+      });
   }
+
+  // Keep the button's displayed state HONEST going forward — without this,
+  // it can silently drift out of sync with Phantom's real connection
+  // state, and since the click handler above trusts isConnected to decide
+  // whether to connect or disconnect, a stale "Connect Wallet" label while
+  // actually already connected means clicking it silently disconnects you.
+  setInterval(() => {
+    const p = window?.solana;
+    if (!p?.isPhantom) return;
+    const actuallyConnected = !!(p.isConnected && p.publicKey);
+    const displayedAsConnected = btn.classList.contains("connected");
+    if (actuallyConnected && !displayedAsConnected) {
+      setConnectedUI(p.publicKey.toString());
+    } else if (!actuallyConnected && displayedAsConnected) {
+      setDisconnectedUI();
+    }
+  }, 2000);
 }
 
 /* ---------------------------------------------------------

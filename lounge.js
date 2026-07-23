@@ -222,10 +222,35 @@ function initNavWallet() {
     }
   });
 
+  // Same silent-reconnect fix as the main site — checking isConnected
+  // alone resets to false on every fresh page load even on a trusted
+  // site, which is why this required reconnecting on every page.
   const provider = window?.solana;
-  if (provider?.isPhantom && provider.isConnected && provider.publicKey) {
-    setConnectedUI(provider.publicKey.toString());
+  if (provider?.isPhantom) {
+    provider.connect({ onlyIfTrusted: true })
+      .then((resp) => setConnectedUI(resp.publicKey.toString()))
+      .catch(() => {
+        // Not previously trusted, or needs manual connect — fine, no-op.
+      });
   }
+
+  // Keep the button's displayed state HONEST going forward, not just
+  // right after page load. Without this, the button can silently drift
+  // out of sync with Phantom's real connection state — and since the
+  // click handler above trusts isConnected to decide whether to connect
+  // or disconnect, a stale "Connect Wallet" label while actually already
+  // connected means clicking it silently disconnects you instead.
+  setInterval(() => {
+    const p = window?.solana;
+    if (!p?.isPhantom) return;
+    const actuallyConnected = !!(p.isConnected && p.publicKey);
+    const displayedAsConnected = btn.classList.contains("connected");
+    if (actuallyConnected && !displayedAsConnected) {
+      setConnectedUI(p.publicKey.toString());
+    } else if (!actuallyConnected && displayedAsConnected) {
+      setDisconnectedUI();
+    }
+  }, 2000);
 }
 
 /* ---------------------------------------------------------
