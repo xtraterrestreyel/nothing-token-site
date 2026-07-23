@@ -223,22 +223,51 @@
   flex-wrap: wrap;
 }
 
+.poker-middle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.poker-seats-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.poker-start-row {
+  display: flex;
+  justify-content: center;
+}
+.poker-start-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--void);
+  background: linear-gradient(90deg, var(--violet), var(--buy));
+  border: none;
+  border-radius: 100px;
+  padding: 10px 22px;
+  cursor: pointer;
+}
+
 .poker-felt-rail {
   background: linear-gradient(135deg, var(--violet), var(--buy));
-  border-radius: 100px / 42px;
-  padding: 7px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+  border-radius: 100px / 40px;
+  padding: 3px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
 }
 
 .poker-felt-middle {
   background: radial-gradient(ellipse at center, rgba(20,241,149,0.08), var(--void-2) 78%);
   border-radius: 100px / 38px;
-  padding: 26px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  min-height: 130px;
+  gap: 8px;
+  min-height: 110px;
   justify-content: center;
 }
 
