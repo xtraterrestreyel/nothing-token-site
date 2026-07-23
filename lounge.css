@@ -278,12 +278,12 @@
 .poker-felt-middle {
   background: radial-gradient(ellipse at center, rgba(20,241,149,0.08), var(--void-2) 78%);
   border-radius: 100px / 38px;
-  padding: 20px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  min-height: 110px;
+  gap: 12px;
+  min-height: 165px;
   justify-content: center;
 }
 
@@ -353,6 +353,7 @@
   align-items: center;
   justify-content: center;
   gap: 1px;
+  overflow: hidden;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -514,10 +515,10 @@
   .poker-seats-row { gap: 8px; }
   .poker-middle-row { gap: 8px; }
   .poker-seat { width: 58px; }
-  .poker-seat-bubble { width: 52px; height: 52px; }
+  .poker-seat-bubble { width: 52px; height: 52px; overflow: hidden; }
   .poker-seat-name { font-size: 8px; }
   .poker-seat-chips { font-size: 9px; }
-  .poker-felt-middle { padding: 12px 10px; min-height: 90px; gap: 6px; }
-  #poker-community .poker-card { width: 30px; height: 42px; font-size: 12px; }
-  .poker-pot { font-size: 14px; }
+  .poker-felt-middle { padding: 18px 15px; min-height: 135px; gap: 9px; }
+  #poker-community .poker-card { width: 45px; height: 63px; font-size: 18px; }
+  .poker-pot { font-size: 16px; }
 }
