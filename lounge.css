@@ -276,22 +276,23 @@
   bottom: -4px;
 }
 
-/* Side seats (desktop only) — cards stacking below the bubble makes no
-   sense here since the table is beside them, not below. Reorient
-   horizontally instead: left seat's cards point right toward the felt,
-   right seat's cards point left toward the felt. */
-#poker-seat-container-5 .poker-seat {
-  flex-direction: row;
-  width: auto;
-}
-#poker-seat-container-2 .poker-seat {
-  flex-direction: row-reverse;
-  width: auto;
-}
-#poker-seat-container-5 .poker-seat-cards,
-#poker-seat-container-2 .poker-seat-cards {
-  flex-direction: column;
-  margin-top: 0;
+/* Side seats (desktop only, ≥481px) — cards stacking below the bubble
+   makes no sense here since the table is beside them, not below.
+   Reorient horizontally instead: left seat's cards point right toward
+   the felt, right seat's cards point left toward the felt. This only
+   repositions the bubble relative to the card PAIR as a group — the
+   two cards within that pair always stay side-by-side (a real hand is
+   never shown stacked on top of itself), and it's desktop-only since on
+   mobile these same containers become ordinary top/bottom-row seats. */
+@media (min-width: 481px) {
+  #poker-seat-container-5 .poker-seat {
+    flex-direction: row;
+    width: auto;
+  }
+  #poker-seat-container-2 .poker-seat {
+    flex-direction: row-reverse;
+    width: auto;
+  }
 }
 
 @media (max-width: 480px) {
@@ -335,6 +336,17 @@
   font-weight: 700;
   color: var(--buy);
   min-height: 18px;
+}
+.poker-countdown {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet);
+  width: 100%;
+  text-align: center;
+}
+.poker-countdown-urgent {
+  color: var(--sell);
 }
 .poker-start-btn {
   font-family: var(--font-mono);
@@ -431,7 +443,7 @@
   justify-content: center;
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 19px;
+  font-size: 23px;
   flex-shrink: 0;
   box-shadow: 0 3px 8px rgba(0,0,0,0.35);
 }
@@ -528,9 +540,9 @@
   margin-top: 2px;
 }
 .poker-seat-cards .poker-card {
-  width: 26px;
-  height: 36px;
-  font-size: 11px;
+  width: 30px;
+  height: 42px;
+  font-size: 13px;
   border-radius: 3px;
 }
 .poker-seat-tag {
@@ -630,7 +642,7 @@
   .poker-seat-chips { font-size: 9px; }
   .poker-felt-middle { padding: 20px 14px; gap: 10px; }
   .poker-community { gap: 8px; }
-  .poker-community-cards .poker-card { width: 36px; height: 50px; font-size: 14px; }
+  .poker-community-cards .poker-card { width: 40px; height: 56px; font-size: 16px; }
   .poker-community-label { font-size: 7px; }
   .poker-pot { font-size: 16px; }
 }

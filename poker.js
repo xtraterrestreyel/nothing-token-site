@@ -21,6 +21,7 @@ const MAX_SEATS = 6;
 let pokerSocket = null;
 let pokerConnectedWallet = null;
 let pokerLastState = null;
+let pokerStateReceivedAt = 0;
 
 const RANK_LABELS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
 const RANK_SINGULAR = ["Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"];
@@ -176,6 +177,7 @@ function connectPokerSocket(wallet) {
     const msg = JSON.parse(event.data);
     if (msg.type === "state") {
       pokerLastState = msg.state;
+      pokerStateReceivedAt = Date.now();
       if (msg.state.mySeat !== null) {
         localStorage.setItem(seatedStorageKey(wallet), "true");
       }
@@ -340,6 +342,13 @@ function renderActions(state) {
   if (state.toActSeat === state.mySeat && !mySeatData.folded && !mySeatData.allIn) {
     const toCall = state.currentBet - mySeatData.committedThisRound;
 
+    if (state.msRemaining !== null) {
+      const countdown = document.createElement("div");
+      countdown.className = "poker-countdown";
+      countdown.id = "poker-countdown";
+      container.appendChild(countdown);
+    }
+
     const foldBtn = document.createElement("button");
     foldBtn.className = "poker-action-btn poker-fold-btn";
     foldBtn.textContent = "Fold";
@@ -488,5 +497,16 @@ function initPokerJoinFlow() {
   // instantly.
   setInterval(tryConnect, 1500);
 }
+
+function tickCountdown() {
+  const el = document.getElementById("poker-countdown");
+  if (!el || !pokerLastState || pokerLastState.msRemaining === null) return;
+  const elapsed = Date.now() - pokerStateReceivedAt;
+  const remainingMs = Math.max(0, pokerLastState.msRemaining - elapsed);
+  const seconds = Math.ceil(remainingMs / 1000);
+  el.textContent = `${seconds}s to act`;
+  el.classList.toggle("poker-countdown-urgent", seconds <= 10);
+}
+setInterval(tickCountdown, 1000);
 
 document.addEventListener("DOMContentLoaded", initPokerJoinFlow);
