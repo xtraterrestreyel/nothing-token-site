@@ -23,6 +23,113 @@ let pokerConnectedWallet = null;
 let pokerLastState = null;
 
 const RANK_LABELS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+const RANK_SINGULAR = ["Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"];
+const RANK_PLURAL = ["Twos", "Threes", "Fours", "Fives", "Sixes", "Sevens", "Eights", "Nines", "Tens", "Jacks", "Queens", "Kings", "Aces"];
+
+/* ---------------------------------------------------------
+   Hand evaluation — same tested logic as the server's dealer
+   (poker-worker.js), ported here so each player can see their own
+   current best hand live, before showdown. This only ever runs on
+   the player's OWN hole cards plus the public community cards — it
+   can't reveal anything about anyone else's hand, since it never
+   has access to any card it isn't already allowed to see.
+   --------------------------------------------------------- */
+function pokerCombinations(arr, k) {
+  const results = [];
+  function helper(start, combo) {
+    if (combo.length === k) {
+      results.push(combo.slice());
+      return;
+    }
+    for (let i = start; i < arr.length; i++) {
+      combo.push(arr[i]);
+      helper(i + 1, combo);
+      combo.pop();
+    }
+  }
+  helper(0, []);
+  return results;
+}
+
+function pokerEvaluate5(cards) {
+  const ranks = cards.map((c) => Math.floor(c / 4)).sort((a, b) => b - a);
+  const suits = cards.map((c) => c % 4);
+  const isFlush = suits.every((s) => s === suits[0]);
+
+  const countByRank = {};
+  for (const r of ranks) countByRank[r] = (countByRank[r] || 0) + 1;
+  const groups = Object.entries(countByRank)
+    .map(([r, c]) => [Number(r), c])
+    .sort((a, b) => b[1] - a[1] || b[0] - a[0]);
+
+  const uniqueRanksDesc = [...new Set(ranks)];
+  let straightHigh = null;
+  if (uniqueRanksDesc.length === 5) {
+    if (uniqueRanksDesc[0] - uniqueRanksDesc[4] === 4) {
+      straightHigh = uniqueRanksDesc[0];
+    } else if (uniqueRanksDesc.join(",") === "12,3,2,1,0") {
+      straightHigh = 3;
+    }
+  }
+
+  if (isFlush && straightHigh !== null) return [8, straightHigh];
+  if (groups[0][1] === 4) return [7, groups[0][0], groups[1][0]];
+  if (groups[0][1] === 3 && groups[1][1] === 2) return [6, groups[0][0], groups[1][0]];
+  if (isFlush) return [5, ...ranks];
+  if (straightHigh !== null) return [4, straightHigh];
+  if (groups[0][1] === 3) return [3, groups[0][0], groups[1][0], groups[2][0]];
+  if (groups[0][1] === 2 && groups[1][1] === 2) {
+    const pairRanks = [groups[0][0], groups[1][0]].sort((a, b) => b - a);
+    return [2, pairRanks[0], pairRanks[1], groups[2][0]];
+  }
+  if (groups[0][1] === 2) return [1, groups[0][0], groups[1][0], groups[2][0], groups[3][0]];
+  return [0, ...ranks];
+}
+
+function pokerCompareScores(a, b) {
+  const len = Math.max(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    const av = a[i] ?? -1;
+    const bv = b[i] ?? -1;
+    if (av !== bv) return av - bv;
+  }
+  return 0;
+}
+
+function pokerBestHand(cards) {
+  let best = null;
+  for (const combo of pokerCombinations(cards, 5)) {
+    const score = pokerEvaluate5(combo);
+    if (best === null || pokerCompareScores(score, best) > 0) best = score;
+  }
+  return best;
+}
+
+function describeHand(holeCards, community) {
+  const allCards = [...holeCards, ...community];
+
+  // Preflop — fewer than 5 total cards, not enough for a real 5-card
+  // hand category yet. Just describe the two hole cards plainly.
+  if (allCards.length < 5) {
+    const ranks = holeCards.map((c) => Math.floor(c / 4)).sort((a, b) => b - a);
+    if (ranks[0] === ranks[1]) return `Pocket ${RANK_PLURAL[ranks[0]]}`;
+    return `${RANK_SINGULAR[ranks[0]]}-${RANK_SINGULAR[ranks[1]]} high`;
+  }
+
+  const score = pokerBestHand(allCards);
+  switch (score[0]) {
+    case 8: return `Straight Flush, ${RANK_SINGULAR[score[1]]}-high`;
+    case 7: return `Four of a Kind, ${RANK_PLURAL[score[1]]}`;
+    case 6: return `Full House, ${RANK_PLURAL[score[1]]} full of ${RANK_PLURAL[score[2]]}`;
+    case 5: return `Flush, ${RANK_SINGULAR[score[1]]}-high`;
+    case 4: return `Straight, ${RANK_SINGULAR[score[1]]}-high`;
+    case 3: return `Three of a Kind, ${RANK_PLURAL[score[1]]}`;
+    case 2: return `Two Pair, ${RANK_PLURAL[score[1]]} and ${RANK_PLURAL[score[2]]}`;
+    case 1: return `Pair of ${RANK_PLURAL[score[1]]}`;
+    default: return `High Card: ${RANK_SINGULAR[score[1]]}`;
+  }
+}
+
 const SUIT_LABELS = ["\u2660", "\u2665", "\u2666", "\u2663"]; // spade heart diamond club
 
 function pokerShortWallet(w) {
@@ -328,6 +435,14 @@ function renderPokerTable(state) {
     const container = document.getElementById(`poker-seat-container-${i}`);
     container.innerHTML = "";
     container.appendChild(renderSeat(state, i));
+  }
+
+  const myHandEl = document.getElementById("poker-my-hand");
+  const mySeatData = state.mySeat !== null ? state.seats[state.mySeat] : null;
+  if (mySeatData && mySeatData.cards && !mySeatData.folded) {
+    myHandEl.textContent = `Your hand: ${describeHand(mySeatData.cards, state.community)}`;
+  } else {
+    myHandEl.textContent = "";
   }
 
   renderStartButton(state);

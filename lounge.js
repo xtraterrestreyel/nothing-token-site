@@ -278,28 +278,12 @@ function initLeaderboardTabs() {
   });
 }
 
-function initWalletDebugStrip() {
-  const el = document.getElementById("wallet-debug-strip");
-  if (!el) return;
-  setInterval(() => {
-    const p = window?.solana;
-    const parts = [
-      `window.solana exists: ${!!p}`,
-      `isPhantom: ${!!p?.isPhantom}`,
-      `isConnected: ${!!p?.isConnected}`,
-      `publicKey: ${p?.publicKey ? p.publicKey.toString().slice(0, 6) + "..." : "none"}`,
-    ];
-    el.textContent = parts.join("  |  ");
-  }, 1000);
-}
-
 function init() {
   document.getElementById("footer-year").textContent = new Date().getFullYear();
   initVoidField();
   renderTierCards(null);
   initNavWallet();
   initLeaderboardTabs();
-  initWalletDebugStrip();
 }
 
 document.addEventListener("DOMContentLoaded", init);

@@ -266,6 +266,33 @@
 #poker-seat-container-4 .poker-seat {
   flex-direction: column-reverse;
 }
+/* The badge is normally pinned to the seat's top corner, next to where
+   the bubble sits — but for a reversed seat the bubble is now at the
+   BOTTOM, so the badge needs to follow it there too, or it lands right
+   on top of the cards instead. */
+#poker-seat-container-3 .poker-dealer-button,
+#poker-seat-container-4 .poker-dealer-button {
+  top: auto;
+  bottom: -4px;
+}
+
+/* Side seats (desktop only) — cards stacking below the bubble makes no
+   sense here since the table is beside them, not below. Reorient
+   horizontally instead: left seat's cards point right toward the felt,
+   right seat's cards point left toward the felt. */
+#poker-seat-container-5 .poker-seat {
+  flex-direction: row;
+  width: auto;
+}
+#poker-seat-container-2 .poker-seat {
+  flex-direction: row-reverse;
+  width: auto;
+}
+#poker-seat-container-5 .poker-seat-cards,
+#poker-seat-container-2 .poker-seat-cards {
+  flex-direction: column;
+  margin-top: 0;
+}
 
 @media (max-width: 480px) {
   /* No side seats on mobile — the felt is too narrow to keep them from
@@ -279,6 +306,10 @@
   }
   #poker-seat-container-5 .poker-seat {
     flex-direction: column-reverse;
+  }
+  #poker-seat-container-5 .poker-dealer-button {
+    top: auto;
+    bottom: -4px;
   }
 
   /* An actual oval curve: the middle seat of each row (#2 top, #5
@@ -296,6 +327,14 @@
 .poker-start-row {
   display: flex;
   justify-content: center;
+}
+.poker-my-hand {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--buy);
+  min-height: 18px;
 }
 .poker-start-btn {
   font-family: var(--font-mono);
@@ -323,11 +362,11 @@
 .poker-felt-middle {
   background: radial-gradient(ellipse at center, rgba(20,241,149,0.08), var(--void-2) 78%);
   border-radius: 100px / 38px;
-  padding: 24px 20px;
+  padding: 28px 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   justify-content: center;
 }
 
@@ -489,9 +528,9 @@
   margin-top: 2px;
 }
 .poker-seat-cards .poker-card {
-  width: 22px;
-  height: 30px;
-  font-size: 9px;
+  width: 26px;
+  height: 36px;
+  font-size: 11px;
   border-radius: 3px;
 }
 .poker-seat-tag {
@@ -589,9 +628,9 @@
   .poker-seat-bubble { width: 52px; height: 52px; overflow: hidden; }
   .poker-seat-name { font-size: 8px; }
   .poker-seat-chips { font-size: 9px; }
-  .poker-felt-middle { padding: 16px 10px; gap: 8px; }
+  .poker-felt-middle { padding: 20px 14px; gap: 10px; }
   .poker-community { gap: 8px; }
-  .poker-community-cards .poker-card { width: 30px; height: 42px; font-size: 12px; }
+  .poker-community-cards .poker-card { width: 36px; height: 50px; font-size: 14px; }
   .poker-community-label { font-size: 7px; }
-  .poker-pot { font-size: 15px; }
+  .poker-pot { font-size: 16px; }
 }

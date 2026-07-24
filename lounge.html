@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="lounge.css?v=6" />
+<link rel="stylesheet" href="lounge.css?v=7" />
 </head>
 <body>
 
@@ -53,8 +53,6 @@
     <h1 class="lounge-title">$NIC Lounge</h1>
     <p class="lounge-tagline">Bragging rights only. No wagering, no entry fees, no payouts — just tournaments, a leaderboard, and a place to hang out.</p>
   </header>
-
-  <div class="wallet-debug-strip" id="wallet-debug-strip">checking wallet state...</div>
 
   <section class="panel lounge-tier-panel" aria-label="Your tier">
     <div class="panel-header">
@@ -107,6 +105,7 @@
             </div>
           </div>
         </div>
+        <div class="poker-my-hand" id="poker-my-hand"></div>
         <div class="poker-start-row" id="poker-start-row"></div>
         <div class="poker-actions" id="poker-actions"></div>
         <div class="poker-log" id="poker-log"></div>
@@ -150,7 +149,7 @@
 </footer>
 
 <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
-<script src="lounge.js?v=6"></script>
-<script src="poker.js?v=6"></script>
+<script src="lounge.js?v=7"></script>
+<script src="poker.js?v=7"></script>
 </body>
 </html>
