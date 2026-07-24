@@ -337,17 +337,29 @@
   color: var(--buy);
   min-height: 18px;
 }
-.poker-countdown {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--violet);
-  width: 100%;
-  text-align: center;
+/* The depleting turn-timer ring — a thick colored arc that shrinks
+   around whoever's currently deciding, visible to everyone at the
+   table (not just the person acting). Built with a conic-gradient
+   rather than an animated border, since the remaining time can vary
+   (a reconnect resumes with whatever time was left, not always a
+   fresh 60s), so the fill needs to be driven by a live JS-updated
+   value rather than a fixed-duration CSS animation. */
+.poker-timer-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--ring-color, var(--buy)) calc(var(--progress, 1) * 360deg),
+    rgba(236, 234, 228, 0.15) 0deg
+  );
+  transition: background 0.25s linear;
 }
-.poker-countdown-urgent {
-  color: var(--sell);
-}
+.poker-timer-ring.ring-green { --ring-color: var(--buy); }
+.poker-timer-ring.ring-yellow { --ring-color: #f5c94a; }
+.poker-timer-ring.ring-red { --ring-color: var(--sell); }
+
 .poker-start-btn {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -466,6 +478,7 @@
 }
 
 .poker-seat-bubble {
+  position: relative;
   width: 68px;
   height: 68px;
   border-radius: 50%;

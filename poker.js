@@ -276,7 +276,16 @@ function renderSeat(state, seatIndex) {
   chipsEl.textContent = seat.chips;
   bubble.appendChild(chipsEl);
 
-  wrap.appendChild(bubble);
+  if (seatIndex === state.toActSeat && state.msRemaining !== null) {
+    const ringWrap = document.createElement("div");
+    ringWrap.className = "poker-timer-ring ring-green";
+    ringWrap.id = "poker-timer-ring";
+    ringWrap.style.setProperty("--progress", "1");
+    ringWrap.appendChild(bubble);
+    wrap.appendChild(ringWrap);
+  } else {
+    wrap.appendChild(bubble);
+  }
 
   if (seat.committedThisRound > 0) {
     const betEl = document.createElement("div");
@@ -341,13 +350,6 @@ function renderActions(state) {
 
   if (state.toActSeat === state.mySeat && !mySeatData.folded && !mySeatData.allIn) {
     const toCall = state.currentBet - mySeatData.committedThisRound;
-
-    if (state.msRemaining !== null) {
-      const countdown = document.createElement("div");
-      countdown.className = "poker-countdown";
-      countdown.id = "poker-countdown";
-      container.appendChild(countdown);
-    }
 
     const foldBtn = document.createElement("button");
     foldBtn.className = "poker-action-btn poker-fold-btn";
@@ -498,15 +500,25 @@ function initPokerJoinFlow() {
   setInterval(tryConnect, 1500);
 }
 
+const TURN_SECONDS = 60;
+
 function tickCountdown() {
-  const el = document.getElementById("poker-countdown");
-  if (!el || !pokerLastState || pokerLastState.msRemaining === null) return;
+  const ring = document.getElementById("poker-timer-ring");
+  if (!ring || !pokerLastState || pokerLastState.msRemaining === null) return;
   const elapsed = Date.now() - pokerStateReceivedAt;
   const remainingMs = Math.max(0, pokerLastState.msRemaining - elapsed);
-  const seconds = Math.ceil(remainingMs / 1000);
-  el.textContent = `${seconds}s to act`;
-  el.classList.toggle("poker-countdown-urgent", seconds <= 10);
+  const progress = remainingMs / (TURN_SECONDS * 1000);
+
+  ring.style.setProperty("--progress", progress.toFixed(3));
+  ring.classList.remove("ring-green", "ring-yellow", "ring-red");
+  if (progress > 0.5) {
+    ring.classList.add("ring-green");
+  } else if (remainingMs > 10000) {
+    ring.classList.add("ring-yellow");
+  } else {
+    ring.classList.add("ring-red");
+  }
 }
-setInterval(tickCountdown, 1000);
+setInterval(tickCountdown, 250);
 
 document.addEventListener("DOMContentLoaded", initPokerJoinFlow);
