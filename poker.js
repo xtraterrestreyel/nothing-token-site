@@ -155,7 +155,15 @@ function seatedStorageKey(wallet) {
 }
 
 function connectPokerSocket(wallet) {
-  if (pokerSocket && pokerSocket.readyState <= 1) return; // already connecting/open
+  if (pokerSocket && pokerSocket.readyState <= 1) {
+    if (pokerConnectedWallet === wallet) return; // already connecting/open for this same wallet
+    // A different wallet is now active (switched accounts in Phantom) —
+    // the old connection needs to actually close, not just be ignored,
+    // or it keeps acting under the previous identity indefinitely.
+    const staleSocket = pokerSocket;
+    pokerSocket = null;
+    staleSocket.close();
+  }
   pokerConnectedWallet = wallet;
 
   pokerSocket = new WebSocket(POKER_WS_URL);
